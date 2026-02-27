@@ -3,11 +3,20 @@ export default function HomeLoading() {
     <div className="container mx-auto px-4 py-6 animate-pulse">
       <div className="flex flex-col gap-6 lg:flex-row">
         <aside className="w-full shrink-0 lg:w-56">
-          <div className="mb-4 h-4 w-20 rounded bg-muted" />
-          <div className="flex flex-col gap-1.5">
-            {Array.from({ length: 8 }, (_, i) => (
-              <div key={i} className="h-8 rounded bg-muted" />
+          {/* Mobile: horizontal pill skeletons */}
+          <div className="flex gap-2 overflow-hidden lg:hidden">
+            {Array.from({ length: 6 }, (_, i) => (
+              <div key={i} className="h-8 w-20 shrink-0 rounded-full bg-muted" />
             ))}
+          </div>
+          {/* Desktop: vertical list skeletons */}
+          <div className="hidden lg:block">
+            <div className="mb-4 h-4 w-20 rounded bg-muted" />
+            <div className="flex flex-col gap-1.5">
+              {Array.from({ length: 8 }, (_, i) => (
+                <div key={i} className="h-8 rounded bg-muted" />
+              ))}
+            </div>
           </div>
         </aside>
 
