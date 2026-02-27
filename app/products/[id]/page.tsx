@@ -13,7 +13,7 @@ interface Props {
 
 export async function generateStaticParams(): Promise<{ id: string }[]> {
   const ids = await getAllProductIds();
-  return ids.map((id) => ({ id: String(id) }));
+  return ids.slice(0, 10).map((id) => ({ id: String(id) }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
