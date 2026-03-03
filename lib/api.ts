@@ -81,6 +81,13 @@ export async function getCategories(): Promise<Category[]> {
   return res.json();
 }
 
+export async function getPopularProducts(): Promise<Product[]> {
+  const res = await fetch(`${BASE_URL}/products?limit=10&skip=0`, fetchOptions);
+  if (!res.ok) throw new Error(`Failed to fetch popular products: ${res.status}`);
+  const data: ProductsResponse = await res.json();
+  return data.products;
+}
+
 export async function getAllProductIds(): Promise<number[]> {
   const res = await fetch(`${BASE_URL}/products?limit=0&select=id`, fetchOptions);
   if (!res.ok) throw new Error(`Failed to fetch product IDs: ${res.status}`);
