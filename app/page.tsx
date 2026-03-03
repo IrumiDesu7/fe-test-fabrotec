@@ -1,11 +1,11 @@
 import { Suspense } from "react";
-import type { Product, SortOrder } from "@/lib/api";
+import type { SortOrder } from "@/lib/api";
 import { getProducts, getCategories, getPopularProducts } from "@/lib/api";
 import { ProductGrid } from "@/components/product-grid";
 import { CategoryFilter } from "@/components/category-filter";
 import { SortControl } from "@/components/sort-control";
 import { Pagination } from "@/components/pagination";
-import { PopularProducts } from "@/components/popular-products";
+import { PopularProducts, PopularProductsSkeleton } from "@/components/popular-products";
 
 interface Props {
   searchParams: Promise<{
@@ -17,6 +17,11 @@ interface Props {
 
 const PRODUCTS_PER_PAGE = 20;
 
+async function PopularProductsSection() {
+  const products = await getPopularProducts();
+  return <PopularProducts products={products} />;
+}
+
 export default async function HomePage({ searchParams }: Props) {
   const params = await searchParams;
   const category = params.category;
@@ -25,17 +30,20 @@ export default async function HomePage({ searchParams }: Props) {
 
   const isDefaultView = page === 1 && !category;
 
-  const [productsData, categories, popularProducts] = await Promise.all([
+  const [productsData, categories] = await Promise.all([
     getProducts(page, sort, category),
     getCategories(),
-    isDefaultView ? getPopularProducts() : Promise.resolve([] as Product[]),
   ]);
 
   const totalPages = Math.ceil(productsData.total / PRODUCTS_PER_PAGE);
 
   return (
     <div className="container mx-auto px-4 py-6">
-      {isDefaultView && <PopularProducts products={popularProducts} />}
+      {isDefaultView && (
+        <Suspense fallback={<PopularProductsSkeleton />}>
+          <PopularProductsSection />
+        </Suspense>
+      )}
 
       <div className="flex flex-col gap-6 lg:flex-row">
         <aside className="w-full shrink-0 lg:w-56">

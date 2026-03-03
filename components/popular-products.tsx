@@ -13,6 +13,29 @@ function formatPrice(price: number): string {
   }).format(price);
 }
 
+const SKELETON_COUNT = 6;
+
+export function PopularProductsSkeleton() {
+  return (
+    <section className="mb-6 animate-pulse">
+      <div className="mb-3 h-5 w-36 rounded bg-muted" />
+      <div className="-mx-4">
+        <div className="flex gap-3 px-4">
+          {Array.from({ length: SKELETON_COUNT }, (_, i) => (
+            <div key={i} className="w-40 shrink-0 overflow-hidden rounded-xl border sm:w-44">
+              <div className="aspect-4/3 bg-muted" />
+              <div className="space-y-1.5 p-2.5">
+                <div className="h-3 w-3/4 rounded bg-muted" />
+                <div className="h-4 w-1/2 rounded bg-muted" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function PopularProducts({ products }: PopularProductsProps) {
   if (products.length === 0) return null;
 
