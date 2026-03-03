@@ -17,9 +17,9 @@ Frontend technical challenge — a product listing app built with **TypeScript**
 
 | Technique | Metric improved | Implementation |
 |---|---|---|
-| **Static Site Generation (SSG)** | TTFB | `generateStaticParams` pre-renders all 194 product pages at build time |
+| **Static Site Generation (SSG)** | TTFB | `generateStaticParams` pre-renders the top 10 product pages at build time; remaining pages are server-rendered on first visit then cached via ISR |
 | **Incremental Static Regeneration (ISR)** | TTFB | `next: { revalidate: 60 }` on all fetch calls — pages stay fresh without full rebuilds |
-| **Server Components** | TTI | 10 of 12 components are server-rendered — near-zero client JavaScript shipped |
+| **Server Components** | TTI | 6 of 8 custom components are server-rendered — near-zero client JavaScript shipped |
 | **Streaming with Suspense** | FCP | `loading.tsx` skeletons at both route levels stream a shell immediately while data loads |
 | **`next/image`** | LCP, CLS | Responsive `sizes`, `priority` on above-fold images, automatic lazy loading, format optimisation |
 | **Parallel data fetching** | TTFB | `Promise.all` fetches categories and products simultaneously — no request waterfall |
@@ -33,7 +33,7 @@ Only **2 client components** exist (`SortControl` for the interactive dropdown, 
 - **Next.js 16** (App Router, Turbopack)
 - **TypeScript**
 - **Tailwind CSS v4**
-- **shadcn/ui** (Card, Badge, Button, Select)
+- **shadcn/ui** (Card, Badge, Button, Select, Carousel)
 - **Netlify** (deployment with `@netlify/plugin-nextjs`)
 
 ## Project Structure
@@ -44,7 +44,7 @@ app/
 ├── page.tsx                # Product list (SSR with search params)
 ├── loading.tsx             # List skeleton
 └── products/[id]/
-    ├── page.tsx            # Product detail (SSG, 194 pages)
+    ├── page.tsx            # Product detail (SSG + ISR fallback)
     └── loading.tsx         # Detail skeleton
 components/
 ├── site-header.tsx         # Header bar (server)
